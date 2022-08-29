@@ -6,12 +6,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Product {
-    private String vendorCode;
+    private Long id;
+    private Long vendorCode;
     private String name;
-    private String lastBuyCoast;
-    private String lastSellCoast;
+    private Long lastBuyCoast;
+    private Long lastSellCoast;
 
-    public Product(String vendorCode, String name, String lastBuyCoast, String lastSellCoast) {
+    public Product(
+            Long vendorCode,
+            String name,
+            Long lastBuyCoast,
+            Long lastSellCoast
+    ) {
         this.vendorCode = vendorCode;
         this.name = name;
         this.lastBuyCoast = lastBuyCoast;
