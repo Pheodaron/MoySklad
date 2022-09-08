@@ -12,6 +12,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <database-postgres-url>jdbc:postgresql://postgres:5432/moyskladdb</database-postgres-url>
+    <database-localhost-url>jdbc:postgresql://localhost:5432/moyskladdb</database-localhost-url>
+    <database-username>moysklad</database-username>
+    <database-password>moysklad</database-password>
+    <database-driver>org.postgresql.Driver</database-driver>
+    <resources>src/main/resources</resources>
   </properties>
 
   <dependencies>
@@ -138,10 +144,10 @@
         </executions>
         <configuration>
           <jdbc>
-            <driver>org.postgresql.Driver</driver>
-            <url>jdbc:postgresql://localhost:5432/moyskladdb</url>
-            <user>moysklad</user>
-            <password>moysklad</password>
+            <driver>${database-driver}</driver>
+            <url>${database-localhost-url}</url>
+            <user>${database-username}</user>
+            <password>${database-password}</password>
           </jdbc>
           <generator>
             <database>
@@ -167,7 +173,12 @@
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>4.15.0</version>
         <configuration>
-          <propertyFile>src/main/resources/liquibase.properties</propertyFile>
+          <outputChangeLogFile>${resources}/liquibase-outputChangeLog.sql</outputChangeLogFile>
+          <changeLogFile>${resources}/liquibase-outputChangeLog.sql</changeLogFile>
+          <driver>${database-driver}</driver>
+          <url>${database-postgres-url}</url>
+          <username>${database-username}</username>
+          <password>${database-password}</password>
         </configuration>
       </plugin>
     </plugins>
