@@ -22,9 +22,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>4.0.1</version>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -116,7 +116,7 @@
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-          <url>http://localhost:8080/manager/text</url>
+          <url>http://localhost:8888/manager/text</url>
           <server>TomcatServer</server>
           <path>/myapp</path>
           <username>admin</username>
@@ -139,9 +139,9 @@
         <configuration>
           <jdbc>
             <driver>org.postgresql.Driver</driver>
-            <url>jdbc:postgresql://localhost:3000/moysklad</url>
-            <user>postgres</user>
-            <password>1991</password>
+            <url>jdbc:postgresql://localhost:5432/moyskladdb</url>
+            <user>moysklad</user>
+            <password>moysklad</password>
           </jdbc>
           <generator>
             <database>
