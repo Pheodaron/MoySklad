@@ -7,7 +7,7 @@ import java.util.Properties;
 public class PropertiesReader {
     private final Properties properties;
 
-    public PropertiesReader(String propertyFileName) throws IOException {
+    public PropertiesReader() throws IOException {
         InputStream is = getClass().getClassLoader().getResourceAsStream("pom.properties");
         this.properties = new Properties();
         this.properties.load(is);
