@@ -1,6 +1,6 @@
 package com.moysklad.service;
 
-import com.moysklad.DataSource;
+import com.moysklad.auxilary.DataSource;
 import com.moysklad.dto.ReceiptDto;
 import com.moysklad.dto.StoreDto;
 import com.moysklad.entity.Product;
