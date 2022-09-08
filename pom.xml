@@ -176,7 +176,7 @@
           <outputChangeLogFile>${resources}/liquibase-outputChangeLog.sql</outputChangeLogFile>
           <changeLogFile>${resources}/liquibase-outputChangeLog.sql</changeLogFile>
           <driver>${database-driver}</driver>
-          <url>${database-postgres-url}</url>
+          <url>${database-localhost-url}</url>
           <username>${database-username}</username>
           <password>${database-password}</password>
         </configuration>
