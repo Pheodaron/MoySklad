@@ -63,3 +63,11 @@ ALTER TABLE "transfer_products" ADD CONSTRAINT "transfer_products_product_id_fke
 -- changeset Evergreen:1661785023861-21
 ALTER TABLE "transfer_products" ADD CONSTRAINT "transfer_products_transfer_id_fkey" FOREIGN KEY ("transfer_id") REFERENCES "transfers" ("id") ON UPDATE CASCADE ON DELETE NO ACTION;
 
+-- changeset Evergreen:1661785023861-22
+INSERT INTO "stores" ("id", "name") VALUES (1, 'Пятерочка');
+
+-- changeset Evergreen:1661785023861-23
+INSERT INTO "stores" ("id", "name") VALUES (2, 'Перекресток');
+
+-- changeset Evergreen:1661785023861-24
+INSERT INTO "stores" ("id", "name") VALUES (3, 'Магнит');
