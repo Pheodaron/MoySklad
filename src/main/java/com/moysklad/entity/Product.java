@@ -7,13 +7,13 @@ import lombok.Setter;
 @Setter
 public class Product {
     private Long id;
-    private Long vendorCode;
+    private String vendorCode;
     private String name;
     private Long lastBuyCoast;
     private Long lastSellCoast;
 
     public Product(
-            Long vendorCode,
+            String vendorCode,
             String name,
             Long lastBuyCoast,
             Long lastSellCoast
