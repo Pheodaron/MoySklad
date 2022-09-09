@@ -5,15 +5,16 @@ import com.moysklad.dto.ReceiptDto;
 import com.moysklad.dto.StoreDto;
 import com.moysklad.entity.Product;
 import com.moysklad.entity.Store;
+import com.moysklad.exceptions.EntityNotFoundException;
 import com.moysklad.jook.tables.Products;
-import com.moysklad.jook.tables.ProductsStores;
 import com.moysklad.jook.tables.Stores;
 import com.moysklad.jook.tables.records.ProductsRecord;
 import com.moysklad.jook.tables.records.StoresRecord;
+import com.moysklad.service.store.StoreRepository;
+import com.moysklad.service.store.StoreRepositoryImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 
 import java.io.BufferedReader;
@@ -21,10 +22,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentsRepositoryImpl implements DocumentsRepository {
+
+    private final StoreRepository storeRepository;
+
+    public DocumentsRepositoryImpl() {
+        this.storeRepository = new StoreRepositoryImpl();
+    }
 
     @Override
     public String readBody(HttpServletRequest req) throws IOException {
@@ -108,53 +114,16 @@ public class DocumentsRepositoryImpl implements DocumentsRepository {
     }
 
     @Override
-    public List<StoreDto> getAllStoresFromDatabase() {
-        try (Connection connection = DataSource.getConnection()) {
-            List<StoreDto> stores = new ArrayList<>();
-            DSLContext ctx = DSL.using(connection, SQLDialect.POSTGRES);
-            var productRecords =
-                    ctx.select(Products.PRODUCTS)
-                    .from(Stores.STORES)
-                    .join(ProductsStores.PRODUCTS_STORES)
-                    .on(ProductsStores.PRODUCTS_STORES.STORE_ID.eq(Stores.STORES.ID))
-                    .join(Products.PRODUCTS)
-                    .on(ProductsStores.PRODUCTS_STORES.PRODUCT_ID.eq(Products.PRODUCTS.ID))
-                    .fetchGroups(Stores.STORES);
-
-            var keySet = productRecords.keySet();
-            for (StoresRecord record : keySet) {
-                var test = productRecords.get(record);
-            }
-            return stores;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+    public StoreDto getStoreById(Long storeId) throws EntityNotFoundException {
+        var optionalStore = storeRepository.getStoreById(storeId);
+        if (optionalStore.isEmpty()) {
+            throw new EntityNotFoundException("Store");
         }
-//        try (Connection connection = DataSource.getConnection()) {
-//            List<StoreDto> stores = new ArrayList<>();
-//            DSLContext ctx = DSL.using(connection, SQLDialect.POSTGRES);
-//            // TODO: 29.08.2022 Add transaction
-//            var productRecords = ctx.select(Stores.STORES.ID, Stores.STORES.NAME, Products.PRODUCTS.VENDOR_CODE, Products.PRODUCTS.VENDOR_CODE, Products.PRODUCTS.NAME, ProductsStores.PRODUCTS_STORES.COUNT)
-//                    .from(Stores.STORES)
-//                    .join(ProductsStores.PRODUCTS_STORES)
-//                    .on(ProductsStores.PRODUCTS_STORES.STORE_ID.eq(Stores.STORES.ID))
-//                    .join(Products.PRODUCTS)
-//                    .on(ProductsStores.PRODUCTS_STORES.PRODUCT_VENDOR_CODE.eq(Products.PRODUCTS.VENDOR_CODE))
-//                    .fetchGroups(Stores.STORES.ID);
-//
-//            var keySet = productRecords.keySet();
-//            for (Long key : keySet) {
-//                var results = productRecords.get(key);
-//                StoreDto store = new StoreDto(key, results.get(0).component2());
-//                stores.add(store);
-//                results.forEach(row -> {
-//                    store.addProduct(new ProductDto(row));
-//                });
-//            }
-//            return stores;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return new ArrayList<>();
-//        }
+        return optionalStore.get();
+    }
+
+    @Override
+    public List<StoreDto> findAllStores() {
+        return storeRepository.findAll();
     }
 }

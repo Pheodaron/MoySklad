@@ -4,6 +4,7 @@ import com.moysklad.dto.ReceiptDto;
 import com.moysklad.dto.StoreDto;
 import com.moysklad.entity.Product;
 import com.moysklad.entity.Store;
+import com.moysklad.exceptions.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -15,11 +16,13 @@ public interface DocumentsRepository {
 
     void addStoreToDatabase(Store store);
 
-    List<StoreDto> getAllStoresFromDatabase();
-
     void addProductToDatabase(Product product, Long storeId);
 
     void addReceiptToDatabase(ReceiptDto dto);
+
+    StoreDto getStoreById(Long storeId) throws EntityNotFoundException;
+
+    List<StoreDto> findAllStores();
 
     void writeBody(HttpServletResponse resp, String responseBody) throws IOException;
 }
