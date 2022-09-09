@@ -6,6 +6,7 @@ import com.moysklad.dto.StoreDto;
 import com.moysklad.entity.Product;
 import com.moysklad.entity.Store;
 import com.moysklad.jook.tables.Products;
+import com.moysklad.jook.tables.ProductsStores;
 import com.moysklad.jook.tables.Stores;
 import com.moysklad.jook.tables.records.ProductsRecord;
 import com.moysklad.jook.tables.records.StoresRecord;
@@ -109,22 +110,22 @@ public class DocumentsRepositoryImpl implements DocumentsRepository {
     @Override
     public List<StoreDto> getAllStoresFromDatabase() {
         try (Connection connection = DataSource.getConnection()) {
-//            List<StoreDto> stores = new ArrayList<>();
-//            DSLContext ctx = DSL.using(connection, SQLDialect.POSTGRES);
-//            var productRecords =
-//                    ctx.select(Products.PRODUCTS)
-//                    .from(Stores.STORES)
-//                    .join(ProductsStores.PRODUCTS_STORES)
-//                    .on(ProductsStores.PRODUCTS_STORES.STORE_ID.eq(Stores.STORES.ID))
-//                    .join(Products.PRODUCTS)
-//                    .on(ProductsStores.PRODUCTS_STORES.PRODUCT_VENDOR_CODE.eq(Products.PRODUCTS.VENDOR_CODE))
-//                    .fetchGroups(Stores.STORES);
-//
-//            var keySet = productRecords.keySet();
-//            for (StoresRecord record : keySet) {
-//                var test = productRecords.get(record);
-//            }
-            return null;
+            List<StoreDto> stores = new ArrayList<>();
+            DSLContext ctx = DSL.using(connection, SQLDialect.POSTGRES);
+            var productRecords =
+                    ctx.select(Products.PRODUCTS)
+                    .from(Stores.STORES)
+                    .join(ProductsStores.PRODUCTS_STORES)
+                    .on(ProductsStores.PRODUCTS_STORES.STORE_ID.eq(Stores.STORES.ID))
+                    .join(Products.PRODUCTS)
+                    .on(ProductsStores.PRODUCTS_STORES.PRODUCT_ID.eq(Products.PRODUCTS.ID))
+                    .fetchGroups(Stores.STORES);
+
+            var keySet = productRecords.keySet();
+            for (StoresRecord record : keySet) {
+                var test = productRecords.get(record);
+            }
+            return stores;
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<>();
